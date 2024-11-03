@@ -1,5 +1,8 @@
 var express = require('express');
 var bodyParser = require('body-parser');
+var multer = require('multer');
+
+var multer = multer();
 app = express();
 /*
 
@@ -40,11 +43,13 @@ app.get("/four", function(req, res){
 })    
 */
 
-app.use(bodyParser.json());
+app.use(multer.array());
+app.use(express.static('public'));
+
 
 app.post('/', function(req, res){
-    let name = req.body;
-    res.send(JSON.stringify(name));
+    let ReqBody = req.body;
+    res.send(JSON.stringify(ReqBody));
 });
 
 app.listen(8000, function() {
