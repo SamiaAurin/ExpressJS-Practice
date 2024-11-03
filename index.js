@@ -1,57 +1,31 @@
 var express = require('express');
-var bodyParser = require('body-parser');
 var multer = require('multer');
+var path = require('path');
 
-var multer = multer();
-app = express();
-/*
+var app = express();
 
-app.get("/", function(req, res){
-    res.send("Home Page");
-})
-
-app.post("/about", function(req, res){
-    res.send("About Page");
-})
-
-app.put("/contact", function(req, res){
-    res.send("Contact Page");
-})
-
-app.post("/terms", function(req, res){
-    res.send("Terms Page");
-})
-*/
-
-/*
-app.get("/four", function(req, res){
-
-    let MyJSONArray = [
-        {
-            name: "Aurin",
-            city: "Dhaka",
-            occupation: "Engr."
-        },
-        {
-            name: "Samia",
-            city: "Dhaka",
-            occupation: "Chef"
-        },
-    ]
-
-    res.json(MyJSONArray);
-})    
-*/
-
-app.use(multer.array());
-app.use(express.static('public'));
-
-
-app.post('/', function(req, res){
-    let ReqBody = req.body;
-    res.send(JSON.stringify(ReqBody));
+// Set up multer storage
+var storage = multer.diskStorage({
+    destination: function(req, file, callback) {
+        callback(null, './uploads');  // Ensure 'uploads' folder exists
+    },
+    filename: function(req, file, callback) {
+        callback(null, Date.now() + path.extname(file.originalname)); // Add unique timestamp to filename
+    }
 });
 
+var upload = multer({ storage: storage }).single('myfile');
+
+app.post('/', function(req, res) {
+    upload(req, res, function(err) {
+        if (err) {
+            return res.end("Error uploading file.");
+        }
+        res.end("File Uploaded Successfully!");
+    });
+});
+
+// Ensure the server is running
 app.listen(8000, function() {
-    console.log("Server Run Success");
-}) 
+    console.log("Server Run Success on port 8000");
+});
