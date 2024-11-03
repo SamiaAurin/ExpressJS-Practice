@@ -1,5 +1,5 @@
 var express = require('express');
-
+var bodyParser = require('body-parser');
 app = express();
 /*
 
@@ -20,7 +20,7 @@ app.post("/terms", function(req, res){
 })
 */
 
-
+/*
 app.get("/four", function(req, res){
 
     let MyJSONArray = [
@@ -38,6 +38,14 @@ app.get("/four", function(req, res){
 
     res.json(MyJSONArray);
 })    
+*/
+
+app.use(bodyParser.json());
+
+app.post('/', function(req, res){
+    let name = req.body;
+    res.send(JSON.stringify(name));
+});
 
 app.listen(8000, function() {
     console.log("Server Run Success");
